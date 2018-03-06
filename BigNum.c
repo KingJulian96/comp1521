@@ -5,7 +5,6 @@
 #include <assert.h>
 #include <string.h>
 #include <ctype.h>
-#include <string.h>
 #include "BigNum.h"
 
 // Initialise a BigNum to N bytes, all zero
@@ -42,14 +41,14 @@ int scanBigNum(char *s, BigNum *n)
     n->bytes = calloc(len, sizeof(unsigned char));
     int i = 0;
     char ch;
-    while (i < len) {
-        ch = s[i];
+    while (len> 0) {
+        ch = s[len];
         if(ch > '9' || ch < '0'){
             return 0;
         }else{
-            n->bytes[i] = ch;
+            n->bytes[len] = ch;
         }
-        i++;
+        len--;
     }
     return 1;
 }
