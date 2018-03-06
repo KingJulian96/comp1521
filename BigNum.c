@@ -20,9 +20,8 @@ void initBigNum(BigNum *n, int Nbytes)
     }
 }
 // Add two BigNums and store result in a third BigNum
-void addBigNums(BigNum n, BigNum m, BigNum *res)
-{
-
+void addBigNums(BigNum n, BigNum m, BigNum *res){
+    
 }
 
 // Set the value of a BigNum from a string of digits
@@ -36,7 +35,12 @@ int scanBigNum(char *s, BigNum *n)
     int i = 0;
     char ch;
     while (i < len) {
-        ch = 
+        ch = s[i];
+        if(ch>9 || ch < 0){
+            return 0;
+        }else{
+            n[i] = ch;
+        }
     }
     return 1;
 }
