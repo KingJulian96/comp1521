@@ -20,18 +20,15 @@ void initBigNum(BigNum *n, int Nbytes)
     }
 }
 
+int square()
 
 // Add two BigNums and store result in a third BigNum
 void addBigNums(BigNum n, BigNum m, BigNum *res){
-    if(n.nbytes > m.nbytes){
-        int temp = n.nbytes;
-        n.nbytes = m.nbytes;
-        m.nbytes = temp;
+    int n_num  = 0;
+    int i = 0;
+    while(i < n.nbytes){
+        n_num =
     }
-    res->bytes = ;
-    int n1 = n.nbytes;
-    int n2 = m.nbytes;
-    int diff = n2- n1;
 
 }
 
