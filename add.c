@@ -39,7 +39,8 @@ int main(int argc, char **argv)
       printf("Second number invalid\n");
       return 1;
     }
-    /*
+    //assert(num1.bytes[0] == '2');
+
     // Add num1+num2, store result in sum
     addBigNums(num1, num2, &sum);
 
@@ -47,7 +48,7 @@ int main(int argc, char **argv)
     printf("\nand "); showBigNum(num2);
     printf("\nis "); showBigNum(sum);
     printf("\n");
-     */
+
     return 0;
 
 }
