@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block body %}
+<p> <br /> </p>
+
+<form method="post">
+    <table>
+        <tr>
+            <td>Username:</td>
+            <td><input type="text" name="name"></td>
+            <td>
+                {% if errors and 'email' in errors %}
+                     <font size="3" color="red">{{ errors['name'] }}</font>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Email:</td>
+            <td><input type="text" name="email"></td>
+            <td>{% if errors and 'password' in errors %}
+                 <font size="3" color="red">{{ errors['email'] }}</font>
+            {% endif %}</td>
+        </tr>
+        <tr>
+            <td>Password:</td>
+            <td><input type="password" name="password"></td>
+            <td>{% if errors and 'password' in errors %}
+                 <font size="3" color="red">{{ errors['password'] }}</font>
+            {% endif %}</td>
+        </tr>
+    </table>
+    <button style = "margin-top:20px">Register</button>
+    {% if errors and 'repeat' in errors %}
+        <font size="3" color="red">{{ errors['repeat'] }}</font>
+    {% endif %}
+</form>
+{% endblock %}

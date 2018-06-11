@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% block body %}
+<form method="POST">
+<br>
+<font size = 2 color = #787878>{{event.status}} {% if event.is_seminar() %}seminar{%else%}course{%endif%} - {{event.id}}</font>
+<br>
+<br>
+<font size = 6><b>{{event.name}}</b></font>
+<br>
+<br>
+<h4>Description:</h4>
+<div style = "width: 80%;">{{event.description}}</div>
+<br>
+<br>
+<table style = "max-width: 70%">
+    <tr>
+        <td>Convener:</td>
+        <td>{{event.convener.name}}</td>
+    </tr>
+    <tr>
+        <td>Venue:</td>
+        <td>{{event.venue}}</td>
+    </tr>
+    <tr>
+        <td>Start date:</td>
+        <td>{{event.start_date}}</td>
+    </tr>
+    <tr>
+        <td>Unregister due date:</td>
+        <td>{{event.register_due_date}}</td>
+    </tr>
+    <tr>
+        <td>Early bird due date:</td>
+        <td>{{event.early_bird_date}}</td>
+    </tr>
+    <tr>
+        <td>End date:</td>
+        <td>{{event.end_date}}</td>
+    </tr>
+    <tr>
+        <td>Registration fee:</td>
+        {% if current_user.get_role() == 'Guest' %}
+        <td>{{event.registration_fee}}</td>
+        {% else %}
+        <td>Free</td>
+        {% endif %}
+    </tr>
+    {% if not event.is_seminar() %}
+        <tr>
+            <td>Attendee:</td>
+            <td>{{event.attendee_number()}} / {{event.attendee_capacity}}</td>
+        </tr>
+        {% if current_user.email == event.convener.email and not event.is_seminar()%}
+        <tr>
+            <td>Attendee list:</td>
+            <td>
+                {% for user in event.attendee_list %}
+                    {{ user.name }}&emsp;
+                {% endfor %}
+            </td>
+        </tr>
+        {% endif %}
+    {% endif %}
+</table>
+<br>
+    <font size="3" color="green">{{ purchase_msg }}</font>
+{% if current_user.email != event.convener.email %}
+    {% if current_user.get_role() != 'Guest' and not event.is_seminar()%}
+        {% if not current_user.is_registered(event.id) %}
+            <button name="Register">Register event</button>
+        {% else %}
+            <button name="Unregister">Unregister event</button>
+        {% endif %}
+    {% elif current_user.get_role() == 'Guest' %}
+        {% if current_user.is_registered(event.id)%}
+            <button name="Unregister">Unregister event</button>
+        {% endif %}
+        {% if current_user.is_purchased(event.id) and not event.is_seminar() and not current_user.is_registered(event.id) %}
+            <button name="Register">Register event</button>
+        {% elif not current_user.is_purchased(event.id)%}
+            <button name="Purchase">Purchase event</button>
+        {% endif %}
+    {% endif %}
+{% else %}
+    {% if event.status == 'open'%}
+    <button name="Cancel">Cancel event</button>
+    <button name="Close">Close event</button>
+    {% endif %}
+    {% if errors and 'convener' in errors %}
+        <br><br><font size="3" color="red">{{ errors['convener'] }}</font>
+    {% endif %}
+    {% if errors and 'status' in errors %}
+        <br><br><font size="3" color="red">{{ errors['status'] }}</font>
+    {% endif %}
+    {% if errors and 'period' in errors %}
+        <br><br><font size="3" color="red">{{ errors['period'] }}</font>
+    {% endif %}
+    {% if errors and 'Guest_role' in errors %}
+        <br><br><font size="3" color="red">{{ errors['Guest_role'] }}</font>
+    {% endif %}
+    {% if errors and 'has_purchased' in errors %}
+        <br><br><font size="3" color="red">{{ errors['has_purchased'] }}</font>
+    {% endif %}
+    {% if errors and 'user' in errors %}
+        <br><br><font size="3" color="red">{{ errors['user'] }}</font>
+    {% endif %}
+    {% if errors and 'repeat_register' in errors %}
+        <br><br><font size="3" color="red">{{ errors['repeat_register'] }}</font>
+    {% endif %}
+    {% if errors and 'full' in errors %}
+        <br><br><font size="3" color="red">{{ errors['full'] }}</font>
+    {% endif %}
+    {% if errors and 'course' in errors %}
+        <br><br><font size="3" color="red">{{ errors['course'] }}</font>
+    {% endif %}
+{% endif %}
+<br>
+<br>
+
+
+
+{% if event.is_seminar() %}
+<br>
+<div style = "width: 70%"><b>Sessions:</b>
+
+{% if current_user.email == event.convener.email %}
+    {% if not creating %}
+        <button style = "float: right;" name="Add_session" style = "margin-left: 250px">Add session</button>
+    {% else %}
+        <table>
+        <tr>
+            <td>Name:</td>
+            <td><input value="{{form['name']}}" name="name" /></td>
+            <td>
+                {% if errors and 'name' in errors %}
+                <font size="3" color="red">{{ errors['name'] }}</font>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Detail:</td>
+            <td><input value="{{form['detail']}}" name="detail" /></td>
+            <td>
+                {% if errors and 'detail' in errors %}
+                <font size="3" color="red">{{ errors['detail'] }}</font>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Attendee capacity:</td>
+            <td><input value="{{form['attendee_capacity']}}" name="attendee_capacity" /></td>
+            <td>
+                {% if errors and 'attendee_capacity' in errors %}
+                <font size="3" color="red">{{ errors['attendee_capacity'] }}</font>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Speaker email:</td>
+            <td><input value="{{form['email']}}" name="email" /></td>
+            <td>
+                {% if errors and 'speaker' in errors %}
+                <font size="3" color="red">{{ errors['speaker'] }}</font>
+                {% endif %}
+            </td>
+        </tr>
+        </table>
+        <button name="Creating_confirm">Creating</button>
+        <button name="Cancel_creating">Cancel</button>
+    {% endif %}
+{% endif %}
+</div>
+    {% for session in event.session_list %}
+        <div style = "width: 70%; margin: 20px 0">
+            <b>{{session.name}}</b>
+            {% if current_user.email != event.convener.email and current_user.get_role() != 'Guest' and event.status == 'open' %}
+                {% if session.is_registered(current_user.email) %}
+                    <a style = "float:right" href="{{ url_for('session_unregister_inner_page', event_id=event.id, session_id=session.id) }}">
+                        unregister session
+                    </a>
+                {% else %}
+                    <a style = "float:right" href="{{ url_for('session_register_inner_page', event_id=event.id, session_id=session.id) }}">
+                        Register session
+                    </a>
+                {% endif %}
+            {% endif %}
+
+            {% if current_user.get_role() == 'Guest' and event.status == 'open' %}
+                {% if current_user.is_purchased(event.id) %}
+                    {% if session.is_registered(current_user.email) %}
+                        <a style = "float:right" href="{{ url_for('session_unregister_inner_page', event_id=event.id, session_id=session.id) }}">
+                            unregister session
+                        </a>
+                    {% else %}
+                        <a style = "float:right" href="{{ url_for('session_register_inner_page', event_id=event.id, session_id=session.id) }}">
+                            Register session
+                        </a>
+                    {% endif %}
+                {% endif %}
+            {% endif %}
+
+        </div>
+        Description:
+        <div style = "margin-top:20px; margin-left:10px; width:70%">{{session.detail}}</div><br>
+        Speaker: {{session.speaker.name}}<br>
+        Attendee: {{session.attendee_num()}} / {{session.attendee_capacity}}<br>
+        {% if current_user.email == event.convener.email %}
+            Attendee list:
+            {% for a in session.attendee_list %}
+                {{ a.name }}&emsp;
+            {% endfor %}
+        {% endif %}
+        <div style = "width: 70%; height: 10px; border-bottom: solid; border-color: grey; border-width: 1px"></div>
+    {% endfor %}
+{% endif %}
+</form>
+{% endblock %}
+
