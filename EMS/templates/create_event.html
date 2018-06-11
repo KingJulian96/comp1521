@@ -1,0 +1,142 @@
+{% extends 'base.html' %}
+{% block body %}
+{% if current_user.get_role() != 'Staff'%}
+<br>No permission.
+{% else %}
+<head>
+    <title>EMS: Create Event</title>
+</head>
+<p> </p>
+<h2 class="w3-wide w3-center">CREATE NEW EVENT</h2><form method="POST">
+    <button name="create_seminar">Create A Seminar</button>
+    <button name="create_course">Create A Course</button>
+    {% if type == 'Seminar' %}
+    <h4>Seminar</h4>
+    {% endif %}
+    {% if type == 'Course' %}
+    <h4>Course</h4>
+    {% endif %}
+    {% if type != '' %}
+    <table>
+        <tr style="display:none">
+            <td>Type:</td>
+            <h4> put in the follow information </h4>
+            <td><input readonly value="{{form['type']}}" name="type", id="type" /></td>
+            {% if type == 'Seminar' %}
+            <script>
+                document.getElementById("type").value = "Seminar"
+            </script>
+            {% endif %}
+            {% if type == 'Course'%}
+            <script>
+                document.getElementById("type").value = "Course"
+            </script>
+            {% endif %}
+        </tr>
+        <tr>
+            <td>Name:</td>
+            <td><input value="{{form['name']}}" name="name" /></td>
+            <td>
+                {% if errors and 'name' in errors %}
+                <font size="3" color="red">{{ errors['name'] }}</font>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Description:</td>
+            <td><input value="{{form['description']}}" name="description" /></td>
+            <td>
+                {% if errors and 'description' in errors %}
+                <font size="3" color="red">{{ errors['description'] }}</font>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Venue:</td>
+            <td><input value="{{form['venue']}}" name="venue" /></td>
+            <td>
+                {% if errors and 'venue' in errors %}
+                <font size="3" color="red">{{ errors['venue'] }}</font>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Start date:</td>
+            <td><input value="{{form['start_date']}}" name="start_date" type="datetime-local" placeholder="YYYY-MM-DDTH:M"/></td>
+            <td>
+                {% if errors and 'start_date' in errors %}
+                <font size="3" color="red">{{ errors['start_date'] }}</font>
+                {% endif %}
+            </td>
+            <td><font size="3">T is a serpator character, eg. 2018-06-17T11:23</font></td> 
+        </tr>
+        <tr>
+            <td>Deregister date:</td>
+            <td><input value="{{form['register_due_date']}}" name="register_due_date" type="datetime-local" placeholder="YYYY-MM-DDTH:M"/></td>
+            <td>
+                {% if errors and 'register_due_date' in errors %}
+                <font size="3" color="red">{{ errors['register_due_date'] }}</font>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>Early bird date:</td>
+            <td><input value="{{form['early_bird_date']}}" name="early_bird_date" type="datetime-local" placeholder="YYYY-MM-DDTH:M"/></td> 
+            <td>
+                {% if errors and 'early_bird_date' in errors %}
+                <font size="3" color="red">{{ errors['early_bird_date'] }}</font>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>End date:</td>
+            <td><input value="{{form['end_date']}}" name="end_date" type="datetime-local" placeholder="YYYY-MM-DDTH:M"/></td>
+            <td>
+                {% if errors and 'end_date' in errors %}
+                <font size="3" color="red">{{ errors['end_date'] }}</font>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <td>fee:</td>
+            <td><input value="{{form['registration_fee']}}" name="registration_fee" /></td>
+            <td>
+                {% if errors and 'registration_fee' in errors %}
+                <font size="3" color="red">{{ errors['registration_fee'] }}</font>
+                {% endif %}
+            </td>
+        </tr>
+        {% if type == 'Course' %}
+        <tr>
+            <td>Attendee capacity:</td>
+            <td><input value="{{form['attendee_capacity']}}" name="attendee_capacity" /></td>
+            <td>
+                {% if errors and 'attendee_capacity' in errors %}
+                <font size="3" color="red">{{ errors['attendee_capacity'] }}</font>
+                {% endif %}
+            </td>
+        </tr>
+        {% endif %}
+    </table>
+    {% if errors and 'period1' in errors %}
+    <font size="3" color="red">{{ errors['period1'] }}</font>
+    <br>
+    {% endif %}
+    {% if errors and 'period2' in errors %}
+    <font size="3" color="red">{{ errors['period2'] }}</font>
+    <br>
+    {% endif %}
+    {% if errors and 'period3' in errors %}
+    <font size="3" color="red">{{ errors['period3'] }}</font>
+    <br>
+    {% endif %}
+    {% if errors and 'period4' in errors %}
+    <font size="3" color="red">{{ errors['period4'] }}</font>
+    <br>
+    {% endif %}
+    <br>
+    <button name="submit">Create</button>
+    {% endif %}
+</form>
+{%endif%}
+{% endblock %}
